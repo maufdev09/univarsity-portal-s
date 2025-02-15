@@ -1,10 +1,30 @@
 import { Schema } from "mongoose";
+import { TUser } from "./user.interface";
+import bcrypt from "bcrypt";
 
-const userSchema= new Schema({
-    id:{
-        type:String,
-        require:true,
-        
-        
-    }
-})
+const userSchema = new Schema<TUser>({
+  id: { type: String, required: true, unique: true },
+
+  password: { type: String, required: true },
+
+  needsPasswordChange: { type: Boolean, default: true },
+
+  role: { type: String, enum: ["admin", "student", "faculty"], required: true },
+
+  status: {
+    type: String,
+    enum: ["in-progress", "blocked"],
+    required: true,
+    default: "in-progress",
+  },
+
+  isDeleted: { type: Boolean, default: false },
+});
+
+userSchema.pre("save", async function (next) {
+  this.password = await bcrypt.hash(this.password, 10);
+
+  next();
+});
+
+
