@@ -137,6 +137,7 @@ const studentSchema = new Schema<TStudent, StudentModel>(
     admissionSemester: {
       type: Schema.Types.ObjectId,
       ref: "AcademicSemester",
+      required: [true, "Admission semester is required"],
     },
     isDeleted: {
       type: Boolean,

@@ -8,7 +8,11 @@ const userSchema = new Schema<TUser>({
   password: { type: String, required: true },
 
   needsPasswordChange: { type: Boolean, default: true },
-
+  admissionSemester: {
+    type: Schema.Types.ObjectId,
+    ref: "AcademicSemester",
+    required: [true, "Admission semester is required"],
+  },
   role: { type: String, enum: ["admin", "student", "faculty"], required: true },
 
   status: {
